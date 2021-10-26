@@ -30,17 +30,19 @@ export function activate(context: vscode.ExtensionContext) {
 			if (vscode.workspace.workspaceFolders) {
 				directory = dirname(vscode.workspace.workspaceFolders[0].uri.fsPath);
 			}
+
+			if (rootFolder === undefined) {
+				vscode.window.showErrorMessage(`You need to open Visual Studio Code settings and add the following setting: 'pytestInDocker.rootFolder'.`);
+			}
+
 			const [_, filePathRelativeToRoot] = filePath.split(`${rootFolder}/`);
 
-			if (filePathRelativeToRoot && extname(filePathRelativeToRoot) === ".py" && filePathRelativeToRoot.indexOf('test') !== -1) {
+			if (filePathRelativeToRoot && extname(filePathRelativeToRoot) === ".py") {
 				if (!commandToLaunchContainer) {
 					vscode.window.showErrorMessage(`You need to open Visual Studio Code settings and add the following setting: 'pytestInDocker.commandToLaunchContainer'.`);
 				}
 				if (commandToLaunchContainer.indexOf(PYTEST_PATTERN) === -1) {
 					vscode.window.showErrorMessage(`The setting 'pytestInDocker.commandToLaunchContainer' needs to contain the pattern ${PYTEST_PATTERN} to launch pytest.`);
-				}
-				if (rootFolder === undefined) {
-					vscode.window.showErrorMessage(`You need to open Visual Studio Code settings and add the following setting: 'pytestInDocker.rootFolder'.`);
 				}
 
 				const commandToLaunchContainerAndPytest = commandToLaunchContainer.replace(PYTEST_PATTERN, `pytest \"${filePathRelativeToRoot}\" ${flags}`);

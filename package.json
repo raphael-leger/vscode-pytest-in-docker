@@ -5,7 +5,7 @@
   "description": "Run the currently opened python file with pytest in a Docker container.",
   "icon": "images/icon.png",
   "repository": "https://github.com/raphael-leger/vscode-pytest-in-docker",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.61.0"
   },
